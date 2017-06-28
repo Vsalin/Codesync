@@ -4,26 +4,75 @@
 <title>ACE in Action</title>
 <style type="text/css" media="screen">
     #editor { 
-        position: absolute;
+        position: fixed; 
         top: 0;
         right: 0;
         bottom: 0;
-        left: 0;
+        left: 160px; 
     }
+      .navbar-fixed-left {
+        width: 160px;
+        position: fixed;
+        border-radius: 0;
+        height: 100%;
+        background: black;
+        top:0;
+        left: 0;
+      }
+
+      /*.navbar-fixed-left .navbar-nav > li {
+        float: none; 
+        width: 100%;
+      }*/
+
+      .navbar-fixed-left + .container {
+        padding-left: 170px;
+      }
+
 </style>
 </head>
 <body>
 
-<div id="editor">function foo(items) {
+<div class="navbar-fixed-left">
+  <ul class="nav navbar-nav">
+   <li><a href="#">Link2</a></li>
+   <li><a href="#">Link3</a></li>
+   <li><a href="#">Link4</a></li>
+   <li><a href="#">Link5</a></li>
+  </ul>
+</div>
+<div class="container">
+   <div id="editor">function foo(items) {
     var x = "All this is syntax highlighted";
     return x;
-}</div>
-    
+}
+</div>
+</div>
+
+<!--<div id="optionsPanel" style="position:absolute;height:100%;width:260px">
+  <a href="https://c9.io" title="Cloud9 IDE | Your code anywhere, anytime">
+    <img id="c9-logo" src="demo/kitchen-sink/logo.png" style="width: 172px;margin: -9px 30px -12px 51px;">
+  </a>
+  <div style="position: absolute; overflow: hidden; top:100px; bottom:0">
+  <div style="width: 120%; height:100%; overflow-y: scroll">
+
+  <table id="controls">
+    <tr>
+      <td>
+        <label for="doc">Document</label>
+      </td><td>
+        <select id="doc" size="1">
+        </select>
+      </td>
+    </tr>
+  </table>
+</body>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
+    editor.resize();
 </script>
 </body>
 </html>
