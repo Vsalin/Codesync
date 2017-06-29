@@ -18,6 +18,7 @@
         background: black;
         top:0;
         left: 0;
+        color: white;
       }
 
       /*.navbar-fixed-left .navbar-nav > li {
@@ -36,6 +37,7 @@
 <div class="navbar-fixed-left">
   <ul class="nav navbar-nav">
    <li><a href="#">Link2</a></li>
+   <li><p id ="directory">Hello there</p></li>
    <li><a href="#">Link3</a></li>
    <li><a href="#">Link4</a></li>
    <li><a href="#">Link5</a></li>
@@ -48,6 +50,8 @@
 }
 </div>
 </div>
+
+
 
 <!--<div id="optionsPanel" style="position:absolute;height:100%;width:260px">
   <a href="https://c9.io" title="Cloud9 IDE | Your code anywhere, anytime">
@@ -68,11 +72,50 @@
   </table>
 </body>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
     editor.resize();
+
+    $.ajax({
+      method: "POST",
+      url: "/show",
+      data: "",
+      contentType: "application/JSON",  
+      dataType: "JSON"
+    }).done(function(data) {  
+            alert("Hey");
+            console.log(data);
+            data.forEach((file) => {
+              $('#directory').append('<li><a>' + file + '</a></li>')
+            })
+            // $("#directory").html(data);
+        })
+        .fail(function (jqXHR, exception) {
+    var msg = '';
+    if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+    alert(msg);
+})
+
+    
+    
 </script>
 </body>
 </html>
