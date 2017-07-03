@@ -9,14 +9,14 @@
         right: 0;
         bottom: 0;
       /*  left: 160px; */
-       left: 600px;
+       left: 160px;
     }
       .navbar-fixed-left {
         width: 160px;
         position: fixed;
         border-radius: 0;
         height: 100%;
-        background: white;
+        background: black;
         top:0;
         left: 0;
         color: white;
@@ -37,78 +37,41 @@
 
 <div class="navbar-fixed-left">
   <ul class="nav navbar-nav">
-   <li><a href="#">Link2</a></li>
-   <li><p id ="directory">Hello there</p></li>
-   <li><a href="#">Link3</a></li>
-   <li><a href="#">Link4</a></li>
-   <li><a href="#">Link5</a></li>
+   <li><p id="directory"></p></li>
   </ul>
 </div>
 <div class="container">
-
-   <div id="editor">function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-}
+  
 </div>
-  <div id="editor">
-    <script>
-     function foo(items) {
-        var x = "All this is syntax highlighted";
-        return x;
-    }
-    </script>
+  <div id="editor" >
+   
   </div>
 </div>
 
-
-
-<!--<div id="optionsPanel" style="position:absolute;height:100%;width:260px">
-  <a href="https://c9.io" title="Cloud9 IDE | Your code anywhere, anytime">
-    <img id="c9-logo" src="demo/kitchen-sink/logo.png" style="width: 172px;margin: -9px 30px -12px 51px;">
-  </a>
-  <div style="position: absolute; overflow: hidden; top:100px; bottom:0">
-  <div style="width: 120%; height:100%; overflow-y: scroll">
-
-  <table id="controls">
-    <tr>
-      <td>
-        <label for="doc">Document</label>
-      </td><td>
-        <select id="doc" size="1">
-        </select>
-      </td>
-    </tr>
-  </table>
-</body>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script>
+
+
+<script>  
+
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
+
     editor.getSession().setMode("ace/mode/javascript");
     editor.resize();
-
     $.ajax({
       method: "POST",
       url: "/show",
       data: "",
       contentType: "application/JSON",  
       dataType: "JSON"
-    }).done(function(data) {  
-<<<<<<< HEAD
-            
-            $("#directory").html(data);
-            
-=======
-            alert("Hey");
+    }).done(function(data) {         
             console.log(data);
             data.forEach((file) => {
-              $('#directory').append('<li><a>' + file + '</a></li>')
+              $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
             // $("#directory").html(data);
->>>>>>> d348d3ba2d70a054531dd6d145c16c4f11b3530f
         })
         .fail(function (jqXHR, exception) {
     var msg = '';
@@ -129,9 +92,34 @@
     }
     alert(msg);
 })
-
-    
-    
 </script>
+<script>
+  $(function() {
+    $('#directory').on('click', 'li > a', function(event) {
+      var dataPath = $(this).data('path')
+      console.log(dataPath)
+
+        $.ajax({
+        method: "POST",
+        url: "/showFile",
+        data: JSON.stringify({b: dataPath }),
+        contentType:"application/JSON",  
+        dataType:"JSON"
+      }).done(function(data) {     
+        // $('.container').html(data)
+        console.log(data)
+        editor.setValue(data.data)
+          // console.log('Sent');
+        })
+    })
+  })
+</script>
+  <script>
+      function append(){
+        var text=""
+        $("data").append(text)
+      }
+  </script>
+
 </body>
 </html>
