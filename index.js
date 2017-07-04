@@ -2,13 +2,9 @@ var express = require('express')
 var app = express()
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
-
 var io = require('socket.io')(http);
-
 const testFolder = './';
 const fs = require('fs');
-
-
   // var path = require("path")
   // , url = require("url")
   // , port = process.env.PORT || 8888
@@ -46,6 +42,7 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
+  // socket.on('document-update',function)
 });
 
 
