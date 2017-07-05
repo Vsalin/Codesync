@@ -58,9 +58,9 @@
 
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
-
     editor.getSession().setMode("ace/mode/javascript");
     editor.resize();
+    editor.$blockScrolling = Infinity;
     $.ajax({
       method: "POST",
       url: "/show",
@@ -120,12 +120,27 @@
         var text=""
         $("data").append(text)
       }
-      
   </script>
 
   <script>
     var socket = io('http://localhost:3003');
   </script>
+
+<script>
+  var socket = io.connect();
+  socket.on('refresh', function (data) {
+    
+  });
+  // socket.on('change', function (data) {
+  //   console.log(data);
+  //   editor.replaceAll(data.text, data.from);
+  // });
+  //   editor.on('change', function (i, op) {
+  //   console.log(op);
+  //   socket.emit('change', op);
+  //   socket.emit('refresh', editor.getValue());
+  // });
+</script>
 
 </body>
 </html>

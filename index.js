@@ -10,6 +10,7 @@ const fs = require('fs');
   // , port = process.env.PORT || 8888
   // , ip = process.env.IP || "0.0.0.0";
 
+
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -25,8 +26,7 @@ const fs = require('fs');
 app.post('/showFile',function(req,res){
    fileName = req.body.b
    console.log('Sent from server  file: '+fileName)
-  // var context = fs.readFileSync(fileName, 'utf8')
-   
+ 
    fs.readFile(fileName, 'binary', function (err,data) {
       if (err) {
       return console.log(err);
@@ -36,16 +36,25 @@ app.post('/showFile',function(req,res){
         })
       });
 })
-
-io.on('connection', function(socket){
+var body="";
+io.sockets.on('connection', function(socket){
     console.log('a user connected');
-  socket.on('disconnect', function(){
+
+    socket.emit('refresh', {body: body});
+    socket.on('refresh', function (body_) {
+
+    // socket.on('change', function (op) {
+    //  console.log(op);
+   
+    // socket.broadcast.emit('change', op);
+
+    socket.on('disconnect', function(){
     console.log('user disconnected');
-  });
-  // socket.on('document-update',function)
-});
+    });
 
-
+  // }})
+  })
+})
 http.listen(3003, function(){
   console.log('listening on *:3003');
 });
