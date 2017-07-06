@@ -8,8 +8,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-      /*  left: 160px; */
-       left: 160px;
+        left: 160px; 
     }
       .navbar-fixed-left {
         width: 160px;
@@ -37,7 +36,6 @@
 
 <div class="navbar-fixed-left">
   <ul class="nav navbar-nav">
-<<<<<<< HEAD
    <li id ="directory">Directory file</li>
   </ul>
 </div>
@@ -45,24 +43,9 @@
   <div id="editor">
   </div>
 </div>
-=======
-   <li><p id="directory"></p></li>
-  </ul>
-</div>
-<div class="container">
-  
-</div>
-  <div id="editor" >
-   
-  </div>
-</div>
-
->>>>>>> e6fea53cae86e5d2268800e66f53fb6aafdd49d1
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<<<<<<< HEAD
 <script>
      var editor = ace.edit("editor");
      editor.setTheme("ace/theme/twilight");
@@ -70,29 +53,13 @@
      editor.$blockScrolling = Infinity;
     
 
-=======
-
-
-<script>  
-
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.resize();
-    editor.$blockScrolling = Infinity;
->>>>>>> e6fea53cae86e5d2268800e66f53fb6aafdd49d1
     $.ajax({
       method: "POST",
       url: "/list",
       data: "",
       contentType: "application/JSON",  
       dataType: "JSON"
-<<<<<<< HEAD
     }).done(function(data) {  
-=======
-    }).done(function(data) {         
-            console.log(data);
->>>>>>> e6fea53cae86e5d2268800e66f53fb6aafdd49d1
             data.forEach((file) => {
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
@@ -114,7 +81,6 @@
         msg = 'Uncaught Error.\n' + jqXHR.responseText;
     }
     alert(msg);
-<<<<<<< HEAD
 });
 </script>
 <script src="/socket.io/socket.io.js"></script>
@@ -138,13 +104,11 @@
         // socket.on('refresh', function () {
         //     editor.setValue(data.data);
         // });
-            
         editor.on('change', function (op) {
             // console.log(op);
             socket.emit('change', op);
             // socket.emit('refresh', editor.getValue());
         });
-
         socket.on('change', function (data) {
             var rang = new Range(data.start.row, data.start.column, data.end.row,data.end.column)
             editor.replace(rang,data.lines);
@@ -171,56 +135,9 @@
     });
 });
 
-
 });
 
 </script>
-=======
-})
-</script>
-<script>
-  $(function() {
-    $('#directory').on('click', 'li > a', function(event) {
-      var dataPath = $(this).data('path')
-      console.log(dataPath)
-
-        $.ajax({
-        method: "POST",
-        url: "/showFile",
-        data: JSON.stringify({b: dataPath }),
-        contentType:"application/JSON",  
-        dataType:"JSON"
-      }).done(function(data) {     
-        
-        socket.on('refresh', function (data) {
-          editor.setValue(data.data)
-        })
-      
-        socket.on('change', function (data) {
-         console.log(data);
-         editor.replaceAll(data.text, data.from, data.to);
-        })
-
-        editor.on('change',function(op){
-          console.log(data)
-        socket.emit('change',op)
-        })
-
-      })
-    })
-  })
-</script>
-  <script>
-      function append(){
-        var text=""
-        $("data").append(text)
-      }
-  </script>
-
-  <script>
-    var socket = io('http://localhost:3003');
-  </script>
->>>>>>> e6fea53cae86e5d2268800e66f53fb6aafdd49d1
 
 </body>
 </html>
