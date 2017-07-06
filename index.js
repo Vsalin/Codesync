@@ -5,16 +5,11 @@ var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 const testFolder = './';
 const fs = require('fs');
-  // var path = require("path")
-  // , url = require("url")
-  // , port = process.env.PORT || 8888
-  // , ip = process.env.IP || "0.0.0.0";
-
-
+ 
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-  app.get('/', function(req, res){
+  app.get('/', function(req, res){  
     res.sendFile(__dirname + '/index.html')
   });
 
@@ -37,24 +32,26 @@ app.post('/showFile',function(req,res){
       });
 })
 var body="";
-io.sockets.on('connection', function(socket){
+  io.sockets.on('connection', function(socket){
     console.log('a user connected');
+    
+    socket.emit('refrest',{body:body})
 
-    socket.emit('refresh', {body: body});
-    socket.on('refresh', function (body_) {
-
-    // socket.on('change', function (op) {
-    //  console.log(op);
-   
-    // socket.broadcast.emit('change', op);
+    socket.on('refrest',function(body_){
+      body=body_
+    })
 
     socket.on('disconnect', function(){
     console.log('user disconnected');
     });
 
-  // }})
+  socket.on('change', function (op) {
+      console.log(op);
+      if(op.action == 'insert' || op.action == 'remove'){
+         socket.broadcast.emit('change', op);
+      }
+    })
   })
-})
 http.listen(3003, function(){
   console.log('listening on *:3003');
 });

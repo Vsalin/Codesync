@@ -107,11 +107,22 @@
         contentType:"application/JSON",  
         dataType:"JSON"
       }).done(function(data) {     
-        // $('.container').html(data)
-        console.log(data)
-        editor.setValue(data.data)
-          // console.log('Sent');
+        
+        socket.on('refresh', function (data) {
+          editor.setValue(data.data)
         })
+      
+        socket.on('change', function (data) {
+         console.log(data);
+         editor.replaceAll(data.text, data.from, data.to);
+        })
+
+        editor.on('change',function(op){
+          console.log(data)
+        socket.emit('change',op)
+        })
+
+      })
     })
   })
 </script>
@@ -125,22 +136,6 @@
   <script>
     var socket = io('http://localhost:3003');
   </script>
-
-<script>
-  var socket = io.connect();
-  socket.on('refresh', function (data) {
-    
-  });
-  // socket.on('change', function (data) {
-  //   console.log(data);
-  //   editor.replaceAll(data.text, data.from);
-  // });
-  //   editor.on('change', function (i, op) {
-  //   console.log(op);
-  //   socket.emit('change', op);
-  //   socket.emit('refresh', editor.getValue());
-  // });
-</script>
 
 </body>
 </html>
