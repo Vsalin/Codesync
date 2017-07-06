@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ACE in Action</title>
+<title>CodeSync</title>
 <style type="text/css" media="screen">
     #editor { 
         position: fixed; 
@@ -36,68 +36,34 @@
 
 <div class="navbar-fixed-left">
   <ul class="nav navbar-nav">
-   <li><a href="#">Link2</a></li>
-   <li><p id ="directory">Hello there</p></li>
-   <li><a href="#">Link3</a></li>
-   <li><a href="#">Link4</a></li>
-   <li><a href="#">Link5</a></li>
+   <li id ="directory">Directory file</li>
   </ul>
 </div>
 <div class="container">
   <div id="editor">
-    <script>
-     function foo(items) {
-        var x = "All this is syntax highlighted";
-        return x;
-    }
-    </script>
   </div>
 </div>
-
-
-
-<!--<div id="optionsPanel" style="position:absolute;height:100%;width:260px">
-  <a href="https://c9.io" title="Cloud9 IDE | Your code anywhere, anytime">
-    <img id="c9-logo" src="demo/kitchen-sink/logo.png" style="width: 172px;margin: -9px 30px -12px 51px;">
-  </a>
-  <div style="position: absolute; overflow: hidden; top:100px; bottom:0">
-  <div style="width: 120%; height:100%; overflow-y: scroll">
-
-  <table id="controls">
-    <tr>
-      <td>
-        <label for="doc">Document</label>
-      </td><td>
-        <select id="doc" size="1">
-        </select>
-      </td>
-    </tr>
-  </table>
-</body>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.resize();
+     var editor = ace.edit("editor");
+     editor.setTheme("ace/theme/twilight");
+     editor.getSession().setMode("ace/mode/javascript");
+     editor.$blockScrolling = Infinity;
+    
 
     $.ajax({
       method: "POST",
-      url: "/show",
+      url: "/list",
       data: "",
       contentType: "application/JSON",  
       dataType: "JSON"
     }).done(function(data) {  
-            alert("Hey");
-            console.log(data);
             data.forEach((file) => {
-              $('#directory').append('<li><a>' + file + '</a></li>')
+              $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
-            // $("#directory").html(data);
-        })
-        .fail(function (jqXHR, exception) {
+  }).fail(function (jqXHR, exception) {
     var msg = '';
     if (jqXHR.status === 0) {
         msg = 'Not connect.\n Verify Network.';
@@ -115,10 +81,66 @@
         msg = 'Uncaught Error.\n' + jqXHR.responseText;
     }
     alert(msg);
-})
-
-    
-    
+});
 </script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  
+  var socket = io('http://localhost:3000');
+  $(function() {
+    $('#directory').on('click', 'li > a', function(event) {
+     // console.log($(this).data('path'))
+     var datafile = $(this).data('path')
+     console.log(datafile)
+        $.ajax({
+        method: "POST",
+        url: "/showfile",
+        data: JSON.stringify({a : datafile}),
+        contentType: "application/JSON",  
+        //  dataType: "JSON"
+    }).done(function(data) {  
+        
+        editor.setValue(data.data); 
+        // socket.on('refresh', function () {
+        //     editor.setValue(data.data);
+        // });
+            
+        editor.on('change', function (op) {
+            // console.log(op);
+            socket.emit('change', op);
+            // socket.emit('refresh', editor.getValue());
+        });
+
+        socket.on('change', function (data) {
+            var rang = new Range(data.start.row, data.start.column, data.end.row,data.end.column)
+            editor.replace(rang,data.lines);
+        });
+
+    }).fail(function (jqXHR, exception) {
+    var msg = '';
+    if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+        alert(msg);
+    });
+});
+
+
+});
+
+</script>
+
 </body>
 </html>
