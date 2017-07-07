@@ -49,10 +49,6 @@
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
     
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     $.ajax({
       method: "POST",
       url: "/list",
@@ -99,20 +95,10 @@
         contentType: "application/JSON",  
         //  dataType: "JSON"
     }).done(function(data) {  
-        
         editor.setValue(data.data); 
-        // socket.on('refresh', function () {
-        //     editor.setValue(data.data);
-        // });
-        editor.on('change', function (op) {
-            // console.log(op);
-            socket.emit('change', op);
-            // socket.emit('refresh', editor.getValue());
-        });
-        socket.on('change', function (data) {
-            var rang = new Range(data.start.row, data.start.column, data.end.row,data.end.column)
-            editor.replace(rang,data.lines);
-        });
+        
+
+
     }).fail(function (jqXHR, exception) {
     var msg = '';
     if (jqXHR.status === 0) {
@@ -133,10 +119,8 @@
         alert(msg);
     });
 });
-
 });
-
 </script>
-
 </body>
 </html>
+
