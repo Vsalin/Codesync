@@ -20,69 +20,33 @@ const fs = require('fs');
     res.sendFile(__dirname + '/index.html')
   });
 
-<<<<<<< HEAD
-var watcher = chokidar.watch('./**/*.js', {
+
+  var watcher = chokidar.watch('./**/*.js', {
   ignored: /node_module/, 
   persistent: true });
     watcher.on('change',function(path){
   console.log('changed: ', path)  
 })
-    // io.sockets.emit('')
+  
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-=======
-// app.post('/showfile',function(req,res){
-//    //path
-//    fileName = req.body.a
-//    console.log('Sent from server  file: '+fileName)
-   
-//    fs.readFile(fileName, 'binary', function (err,data) {
-//       if (err) {
-//       return console.log(err);
-//     }
-//         res.json({
-//           data:data
-//         })
-//       });
-//})
->>>>>>> bd993743a412f8a1da162e18ab731e4675a532e5
+
 
 io.on('connection', function(socket){
   console.log('a user connected');
     var  myfile =  fs.readdirSync(testFolder)
     io.emit('listdir',myfile)
 
-<<<<<<< HEAD
-    var  dataFile=fs.readFileSync(fileName, 'binary' )
-    ip.emit('readFile')
-    
-    socket.emit('file',{datafile:data})
-=======
     var datafile = fs.readFileSync('README.md','binary');
     console.log(datafile);
     io.emit('readfile',datafile)
->>>>>>> bd993743a412f8a1da162e18ab731e4675a532e5
+
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 });
-
-<<<<<<< HEAD
-=======
-
- //chokidar start
-//   var watcher = chokidar.watch('README.md', {
-//     ignored: /(^|[\/\\])\../,
-//     persistent: true
-//   });
-//   watcher
-//   .on('add', path => console.log(`File ${path} has been added`))
-//   .on('change', path => console.log(`File ${path} has been changed`));
-
-
->>>>>>> bd993743a412f8a1da162e18ab731e4675a532e5
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
