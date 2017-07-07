@@ -20,32 +20,41 @@ const fs = require('fs');
     res.sendFile(__dirname + '/index.html')
   });
 
-var watcher = chokidar.watch('./**/*.js', {
-  ignored: /node_module/, 
-  persistent: true });
-    watcher.on('change',function(path){
-  console.log('changed: ', path)  
+app.post('/showfile',function(req,res){
+   //path
+   fileName = req.body.a
+   console.log('Sent from server  file: '+fileName)
+  // var context = fs.readFileSync(fileName, 'utf8')
+   
+   fs.readFile(fileName, 'binary', function (err,data) {
+      if (err) {
+      return console.log(err);
+    }
+        res.json({
+          data:data
+        })
+      });
 })
-    // io.sockets.emit('')
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
 
 io.on('connection', function(socket){
   console.log('a user connected');
     var  myfile =  fs.readdirSync(testFolder)
     io.emit('listdir',myfile)
 
-    var  dataFile=fs.readFileSync(fileName, 'binary' )
-    ip.emit('readFile')
-    
-    socket.emit('file',{datafile:data})
-
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
-
 });
+
+ //chokidar start
+//   var watcher = chokidar.watch('README.md', {
+//     ignored: /(^|[\/\\])\../,
+//     persistent: true
+//   });
+//   watcher
+//   .on('add', path => console.log(`File ${path} has been added`))
+//   .on('change', path => console.log(`File ${path} has been changed`));
+
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
