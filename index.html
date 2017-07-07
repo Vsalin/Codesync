@@ -114,7 +114,7 @@
       
         socket.on('change', function (data) {
          console.log(data);
-        
+         editor.replaceAll(data.text, data.from, data.to);
         })
 
         editor.on('change',function(op){
