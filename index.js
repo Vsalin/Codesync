@@ -2,7 +2,7 @@ var express = require('express')
 var app = express()
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
-
+var chokidar = require('chokidar');
 var io = require('socket.io')(http);
 
 const testFolder = './';
@@ -40,30 +40,21 @@ app.post('/showfile',function(req,res){
       });
 })
 
-io.on('connection', function(socket){
-  //var socks = [];
-  //var body = "";
-  console.log('a user connected');
-  //socks.push(socket);
-  // socket.emit('refresh', {body: body});
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
+// io.on('connection', function(socket){
+//   console.log('a user connected');
+//   socket.on('disconnect', function(){
+//     console.log('user disconnected');
+//   });
 
-  socket.on('change', function (op) {
-    console.log(op);
-    if (op.action == 'insert' || op.action == 'remove' ) {
-        //console.log('I found insert || remove')
-        socket.emit('change', op);
-       // socket.broadcast.emit('change', op);
-     };
-  });
- 
-  // socket.on('refresh', function (body_) {
-  //   console.log('new body');
-  //   body = body_;
-  // });
-});
+//   socket.on('change', function (op) {
+//     console.log(op);
+//     // if (op.action == 'insert' || op.action == 'remove' ) {
+//     //     console.log('I found insert || remove')
+//     //     socket.emit('change', op);  
+//     //     socket.broadcast.emit('change', op);
+//     //  };
+//   });
+// });
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
