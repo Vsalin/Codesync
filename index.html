@@ -21,11 +21,6 @@
         color: white;
       }
 
-      /*.navbar-fixed-left .navbar-nav > li {
-        float: none; 
-        width: 100%;
-      }*/
-
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
@@ -51,20 +46,6 @@
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
-
-    // $.ajax({
-    //   method: "POST",
-    //   url: "/list",
-    //   data: "",
-    //   contentType: "application/JSON",  
-    //   dataType: "JSON"
-    // }).done(function(data) {  
-    //         data.forEach((file) => {
-    //           $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
-    //         })
-    // }).fail(function (e) {
-    // alert('fail:'+ e);
-    // });
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -74,8 +55,15 @@
         data.forEach((file) => {
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
-        console.log(data);
+       // console.log(data);
     });
+
+    socket.on('readfile', function (datafile) {
+        editor.setValue(datafile); 
+        console.log(datafile);
+    });
+    
+    
 
 </script>
 <!--<script>
@@ -119,21 +107,6 @@
 });
 
 </script>-->
-
-</body>
-</html>
-    } else if (exception === 'abort') {
-        msg = 'Ajax request aborted.';
-    } else {
-        msg = 'Uncaught Error.\n' + jqXHR.responseText;
-    }
-        alert(msg);
-    });
-});
-
-});
-
-</script>
 
 </body>
 </html>
