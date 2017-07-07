@@ -34,13 +34,6 @@ app.post('/showFile',function(req,res){
 var body="";
   io.sockets.on('connection', function(socket){
     console.log('a user connected');
-    
-    socket.emit('refrest',{body:body})
-
-    socket.on('refrest',function(body_){
-      body=body_
-    })
-
     socket.on('disconnect', function(){
     console.log('user disconnected');
     });
