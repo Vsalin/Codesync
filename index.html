@@ -20,13 +20,16 @@
         left: 0;
         color: white;
       }
+
       /*.navbar-fixed-left .navbar-nav > li {
         float: none; 
         width: 100%;
       }*/
+
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
+
 </style>
 </head>
 <body>
@@ -48,6 +51,7 @@
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
+<<<<<<< HEAD
     
     $.ajax({
       method: "POST",
@@ -78,15 +82,41 @@
     }
     alert(msg);
 });
+=======
+
+    // $.ajax({
+    //   method: "POST",
+    //   url: "/list",
+    //   data: "",
+    //   contentType: "application/JSON",  
+    //   dataType: "JSON"
+    // }).done(function(data) {  
+    //         data.forEach((file) => {
+    //           $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
+    //         })
+    // }).fail(function (e) {
+    // alert('fail:'+ e);
+    // });
+>>>>>>> 76e5fa6afdd282e04a9c46c1706d58e0b2c6f972
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  
-  var socket = io('http://localhost:3000');
+    var socket = io('http://localhost:3000');
+      
+    socket.on('listdir', function (data) {
+        data.forEach((file) => {
+              $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
+            })
+        console.log(data);
+    });
+
+</script>
+<!--<script>
+ 
   $(function() {
     $('#directory').on('click', 'li > a', function(event) {
      // console.log($(this).data('path'))
-     var datafile = $(this).data('path')
+     var datafile = $(this).data('path')  //path
      console.log(datafile)
         $.ajax({
         method: "POST",
@@ -96,9 +126,13 @@
         //  dataType: "JSON"
     }).done(function(data) {  
         editor.setValue(data.data); 
+<<<<<<< HEAD
         
 
 
+=======
+       
+>>>>>>> 76e5fa6afdd282e04a9c46c1706d58e0b2c6f972
     }).fail(function (jqXHR, exception) {
     var msg = '';
     if (jqXHR.status === 0) {
@@ -120,6 +154,25 @@
     });
 });
 });
+<<<<<<< HEAD
+=======
+
+</script>-->
+
+</body>
+</html>
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+        alert(msg);
+    });
+});
+
+});
+
+>>>>>>> 76e5fa6afdd282e04a9c46c1706d58e0b2c6f972
 </script>
 </body>
 </html>
