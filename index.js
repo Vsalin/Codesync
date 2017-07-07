@@ -2,8 +2,8 @@ var express = require('express')
 var app = express()
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
-
 var io = require('socket.io')(http);
+var chokidar = require('chokidar');
 
 const testFolder = './';
 const fs = require('fs');
@@ -26,6 +26,7 @@ const fs = require('fs');
     })
 
 app.post('/showfile',function(req,res){
+   //path
    fileName = req.body.a
    console.log('Sent from server  file: '+fileName)
   // var context = fs.readFileSync(fileName, 'utf8')
@@ -41,29 +42,22 @@ app.post('/showfile',function(req,res){
 })
 
 io.on('connection', function(socket){
-  //var socks = [];
-  //var body = "";
   console.log('a user connected');
-  //socks.push(socket);
-  // socket.emit('refresh', {body: body});
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 
-  socket.on('change', function (op) {
-    console.log(op);
-    if (op.action == 'insert' || op.action == 'remove' ) {
-        //console.log('I found insert || remove')
-        socket.emit('change', op);
-       // socket.broadcast.emit('change', op);
-     };
-  });
- 
-  // socket.on('refresh', function (body_) {
-  //   console.log('new body');
-  //   body = body_;
-  // });
 });
+
+ //chokidar start
+  var watcher = chokidar.watch('README.md', {
+    ignored: /(^|[\/\\])\../,
+    persistent: true
+  });
+  watcher
+  .on('add', path => console.log(`File ${path} has been added`))
+  .on('change', path => console.log(`File ${path} has been changed`));
+
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

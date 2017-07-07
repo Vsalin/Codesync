@@ -85,12 +85,11 @@
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  
   var socket = io('http://localhost:3000');
   $(function() {
     $('#directory').on('click', 'li > a', function(event) {
      // console.log($(this).data('path'))
-     var datafile = $(this).data('path')
+     var datafile = $(this).data('path')  //path
      console.log(datafile)
         $.ajax({
         method: "POST",
@@ -101,19 +100,7 @@
     }).done(function(data) {  
         
         editor.setValue(data.data); 
-        // socket.on('refresh', function () {
-        //     editor.setValue(data.data);
-        // });
-        editor.on('change', function (op) {
-            // console.log(op);
-            socket.emit('change', op);
-            // socket.emit('refresh', editor.getValue());
-        });
-        socket.on('change', function (data) {
-            var rang = new Range(data.start.row, data.start.column, data.end.row,data.end.column)
-            editor.replace(rang,data.lines);
-        });
-
+       
     }).fail(function (jqXHR, exception) {
     var msg = '';
     if (jqXHR.status === 0) {
