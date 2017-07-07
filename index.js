@@ -2,6 +2,12 @@ var express = require('express')
 var app = express()
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
+<<<<<<< HEAD
+=======
+
+var chokidar = require('chokidar');
+
+>>>>>>> 4615e2ebc05e603fa38fb1e4edc8189c7e38f6f8
 var io = require('socket.io')(http);
 var chokidar = require('chokidar');
 
@@ -47,6 +53,17 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 
+<<<<<<< HEAD
+=======
+  socket.on('change', function (op) {
+    console.log(op);
+    if (op.action == 'insert' || op.action == 'remove' ) {
+        //console.log('I found insert || remove')
+        socket.emit('change', op);
+       // socket.broadcast.emit('change', op);
+     };
+  });
+>>>>>>> 4615e2ebc05e603fa38fb1e4edc8189c7e38f6f8
 });
 
  //chokidar start
