@@ -42,9 +42,22 @@ io.on('connection', function(socket){
     var  myfile =  fs.readdirSync(testFolder)
     io.emit('listdir',myfile)
 
+
+
+
+
+
     var datafile = fs.readFileSync('README.md','binary');
     console.log(datafile);
     io.emit('readfile',datafile)
+
+
+
+
+
+
+
+
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -57,11 +70,14 @@ io.on('connection', function(socket){
     persistent: true
   });
   watcher
-  .on('add', path => console.log(`File ${path} has been added`))
   .on('change', path => {
     var datafile = fs.readFileSync('README.md','binary');
-    console.log(datafile);
-    io.emit('readfile',datafile)
+    // console.log(datafile);
+    console.log(path)
+    io.emit('readfile', {
+      text: datafile,
+      path: path
+    })
   });
     
 

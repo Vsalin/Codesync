@@ -58,10 +58,26 @@
        // console.log(data);
     });
 
+
+
+
+
+
     socket.on('readfile', function (datafile) {
+        if(datafile.path==test){
         editor.setValue(datafile); 
+
+        }
         console.log(datafile);
     });
+
+
+
+
+
+
+
+
     
 </script>
 <!--<script>
