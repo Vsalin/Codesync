@@ -33,7 +33,8 @@ const fs = require('fs');
 //           data:data
 //         })
 //       });
-//})
+
+// })
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -49,15 +50,19 @@ io.on('connection', function(socket){
   });
 });
 
-
- //chokidar start
-//   var watcher = chokidar.watch('README.md', {
-//     ignored: /(^|[\/\\])\../,
-//     persistent: true
-//   });
-//   watcher
-//   .on('add', path => console.log(`File ${path} has been added`))
-//   .on('change', path => console.log(`File ${path} has been changed`));
+//  chokidar start
+  var watcher = chokidar.watch('README.md', {
+    ignored: /(^|[\/\\])\../,
+    persistent: true
+  });
+  watcher
+  .on('add', path => console.log(`File ${path} has been added`))
+  .on('change', path => {
+    var datafile = fs.readFileSync('README.md','binary');
+    console.log(datafile);
+    io.emit('readfile',datafile)
+  });
+    
 
 
 http.listen(3000, function(){
