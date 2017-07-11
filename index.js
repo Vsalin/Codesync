@@ -35,6 +35,7 @@ http.listen(3000, function(){
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  
     var  myfile =  fs.readdirSync(testFolder)
     io.emit('listdir',myfile)
 
