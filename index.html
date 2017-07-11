@@ -58,10 +58,17 @@
        // console.log(data);
     });
 
-    socket.on('readfile', function (datafile) {
-        editor.setValue(datafile); 
-        console.log(datafile);
-    });
+    // socket.on('readfile', function (datafile) {
+    //     editor.setValue(datafile); 
+    //     console.log(datafile);
+    // });
+
+     $('#directory').on('click', 'li > a', function(event) {
+     var pathFile = $(this).data('path')  //path
+     console.log(pathFile)
+     socket.emit('Callpath',pathFile);
+    })
+
     
 </script>
 <!--<script>
