@@ -58,27 +58,18 @@
        // console.log(data);
     });
 
-
-
-
-
+    $('#directory').on('click', 'li > a', function(event) {
+         var pathFile = $(this).data('path')  //path
+        console.log(pathFile)
+        socket.emit('Callpath',pathFile);
+    })
 
     socket.on('readfile', function (datafile) {
-        if(datafile.path==test){
         editor.setValue(datafile); 
-
-        }
         console.log(datafile);
     });
 
 
-
-
-
-
-
-
-    
 </script>
 <!--<script>
  
