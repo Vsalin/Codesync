@@ -20,6 +20,7 @@ const fs = require('fs');
     res.sendFile(__dirname + '/index.html')
   });
 
+<<<<<<< HEAD
 // app.post('/showfile',function(req,res){
 //    //path
 //    fileName = req.body.a
@@ -35,6 +36,20 @@ const fs = require('fs');
 //       });
 
 // })
+=======
+
+  var watcher = chokidar.watch('./**/*.js', {
+  ignored: /node_module/, 
+  persistent: true });
+    watcher.on('change',function(path){
+  console.log('changed: ', path)  
+})
+  
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+
+>>>>>>> 61e2222669bd795d6136f884a293252bc608967c
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -45,10 +60,12 @@ io.on('connection', function(socket){
     console.log(datafile);
     io.emit('readfile',datafile)
 
+
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 });
+<<<<<<< HEAD
 
 //  chokidar start
   var watcher = chokidar.watch('README.md', {
@@ -65,6 +82,8 @@ io.on('connection', function(socket){
     
 
 
+=======
+>>>>>>> 61e2222669bd795d6136f884a293252bc608967c
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
