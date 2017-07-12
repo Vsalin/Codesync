@@ -56,6 +56,26 @@
             })
        // console.log(data);
     });
+<<<<<<< HEAD
+=======
+
+    $('#directory').on('click', 'li > a', function(event) {
+         var pathFile = $(this).data('path')  //path
+        console.log(pathFile)
+        socket.emit('Callpath',pathFile);
+    })
+
+    socket.on('readfile', function (datafile) {
+        editor.setValue(datafile); 
+        console.log(datafile);
+    });
+
+
+</script>
+<!--<script>
+ 
+  $(function() {
+>>>>>>> 22df20d6b26495a6d7326ff2add6fcfc1698fcb0
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path')  //path
         console.log(pathFile)

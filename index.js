@@ -31,6 +31,7 @@ io.on('connection', function(socket){
 
   socket.on('Callpath',function(pathFile){
     console.log(pathFile);
+<<<<<<< HEAD
     var room = "abc123";
     //join in to room path name
     //socket.join(pathFile);
@@ -42,6 +43,12 @@ io.on('connection', function(socket){
     
 
   var watcher = chokidar.watch(pathFile, {
+=======
+    var datafile = fs.readFileSync(pathFile,'binary');
+    io.emit('readfile',datafile)
+
+  var watcher = chokidar.watch('index.js', {
+>>>>>>> 22df20d6b26495a6d7326ff2add6fcfc1698fcb0
     ignored: /node_modules/,
     persistent: true
    });
@@ -49,9 +56,13 @@ io.on('connection', function(socket){
   .on('change', path => {
     var datafile = fs.readFileSync(pathFile,'binary');
     console.log(path)
+<<<<<<< HEAD
       var room = "abc123";
     socket.in(room).emit('readfile', datafile);
      //io.emit('readfile',datafile)
+=======
+     io.emit('readfile',datafile)
+>>>>>>> 22df20d6b26495a6d7326ff2add6fcfc1698fcb0
   });
 
   })
