@@ -26,10 +26,6 @@ io.on('connection', function(socket){
     var  myfile =  fs.readdirSync(testFolder)
     io.emit('listdir',myfile)
 
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-
   socket.on('Callpath',function(pathFile){
 
     var room = pathFile;
@@ -50,6 +46,10 @@ io.on('connection', function(socket){
       console.log('file changed: ', path)
       io.emit('readfile',datafile)
     });
+    socket.on('disconnect', function(){
+    watcher.close();
+    console.log('user disconnected');
+  });
 
 
   })

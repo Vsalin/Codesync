@@ -56,10 +56,8 @@
             })
     });
     $('#directory').on('click', 'li > a', function(event) {
-
          var pathFile = $(this).data('path')  //path
         console.log('Get file', pathFile)
-
         socket.emit('Callpath',pathFile);
     })
     socket.on('readfile', function (datafile) {
