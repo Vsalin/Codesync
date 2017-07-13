@@ -50,68 +50,26 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:3000');
-      
+    var room="ab"
     socket.on('listdir', function (data) {
         data.forEach((file) => {
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
-       // console.log(data);
     });
 
     $('#directory').on('click', 'li > a', function(event) {
          var pathFile = $(this).data('path')  //path
-        console.log(pathFile)
+        console.log('Get file', pathFile)
         socket.emit('Callpath',pathFile);
     })
 
     socket.on('readfile', function (datafile) {
+        console.log('Receive file: ', datafile);
         editor.setValue(datafile); 
-        console.log(datafile);
     });
 
 
 </script>
-<!--<script>
- 
-  $(function() {
-    $('#directory').on('click', 'li > a', function(event) {
-     // console.log($(this).data('path'))
-     var datafile = $(this).data('path')  //path
-     console.log(datafile)
-        $.ajax({
-        method: "POST",
-        url: "/showfile",
-        data: JSON.stringify({a : datafile}),
-        contentType: "application/JSON",  
-        //  dataType: "JSON"
-    }).done(function(data) {  
-        
-        editor.setValue(data.data); 
-       
-    }).fail(function (jqXHR, exception) {
-    var msg = '';
-    if (jqXHR.status === 0) {
-        msg = 'Not connect.\n Verify Network.';
-    } else if (jqXHR.status == 404) {
-        msg = 'Requested page not found. [404]';
-    } else if (jqXHR.status == 500) {
-        msg = 'Internal Server Error [500].';
-    } else if (exception === 'parsererror') {
-        msg = 'Requested JSON parse failed.';
-    } else if (exception === 'timeout') {
-        msg = 'Time out error.';
-    } else if (exception === 'abort') {
-        msg = 'Ajax request aborted.';
-    } else {
-        msg = 'Uncaught Error.\n' + jqXHR.responseText;
-    }
-        alert(msg);
-    });
-});
-
-});
-
-</script>-->
 
 </body>
 </html>
