@@ -20,11 +20,9 @@
         left: 0;
         color: white;
       }
-
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
-
 </style>
 </head>
 <body>
@@ -46,6 +44,7 @@
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
+     editor.getSession().setUseWrapMode(false);
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -56,19 +55,17 @@
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
     });
-
     $('#directory').on('click', 'li > a', function(event) {
+
          var pathFile = $(this).data('path')  //path
         console.log('Get file', pathFile)
+
         socket.emit('Callpath',pathFile);
     })
-
     socket.on('readfile', function (datafile) {
         console.log('Receive file: ', datafile);
         editor.setValue(datafile); 
     });
-
-
 </script>
 
 </body>

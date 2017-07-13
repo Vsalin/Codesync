@@ -31,6 +31,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('Callpath',function(pathFile){
+
     var room = pathFile;
     var datafile = fs.readFileSync(pathFile,'binary');
    // io.emit('readfile',datafile)
@@ -49,6 +50,7 @@ io.on('connection', function(socket){
       console.log('file changed: ', path)
       io.emit('readfile',datafile)
     });
+
 
   })
 });
