@@ -13,6 +13,7 @@ const fs = require('fs');
   , port = process.env.PORT || 8888
   , ip = process.env.IP || "0.0.0.0";
 
+
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -30,26 +31,27 @@ io.on('connection', function(socket){
   });
 
   socket.on('Callpath',function(pathFile){
-    console.log(pathFile);
-    //join in to room path name
-    socket.join(pathFile);
-    var datafile = fs.readFileSync(pathFile,'binary');
-    //sent data file to room path
-    socket.in(pathFile).emit('readfile', datafile);
-    //io.emit('readfile',datafile);
-    
-var watcher = chokidar.watch(pathFile, {
-    ignored: /node_modules/,
-    persistent: true
-   });
-  watcher
-  .on('change', path => {
-    var datafile = fs.readFileSync(pathFile,'binary');
-    console.log(path)
 
-    socket.in(path).emit('readfile', datafile);
-     //io.emit('readfile',datafile)
-  });
+    var room = pathFile;
+    var datafile = fs.readFileSync(pathFile,'binary');
+   // io.emit('readfile',datafile)
+    console.log('file content: ', datafile)
+    
+    socket.join(room);
+    io.sockets.in(room).emit('readfile', datafile);
+
+    var watcher = chokidar.watch(pathFile, {
+      ignored: /node_modules/,
+      persistent: true
+    });
+
+    watcher.on('change', path => {
+      var datafile = fs.readFileSync(pathFile,'binary');
+      console.log('file changed: ', path)
+      io.sockets.in(room).emit('readfile', datafile);
+     // io.emit('readfile',datafile)
+    });
+
 
   })
 });

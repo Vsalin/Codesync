@@ -49,22 +49,20 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:3000');
-      
+    var room="ab"
     socket.on('listdir', function (data) {
         data.forEach((file) => {
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
-       // console.log(data);
     });
     $('#directory').on('click', 'li > a', function(event) {
-        var pathFile = $(this).data('path')  //path
-        console.log(pathFile)
+         var pathFile = $(this).data('path')  //path
+        console.log('Get file', pathFile)
         socket.emit('Callpath',pathFile);
     })
     socket.on('readfile', function (datafile) {
+        console.log('Receive file: ', datafile);
         editor.setValue(datafile); 
-        console.log(datafile);
-        console.log('from readfile in client')
     });
 </script>
 
