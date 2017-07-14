@@ -13,7 +13,6 @@ const fs = require('fs');
   , port = process.env.PORT || 8888
   , ip = process.env.IP || "0.0.0.0";
 
-
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -24,40 +23,34 @@ const fs = require('fs');
 io.on('connection', function(socket){
   console.log('a user connected');
     var  myfile =  fs.readdirSync(testFolder)
-    io.emit('listdir',myfile)
+    socket.emit('listdir',myfile)
+  
 
-  socket.on('Callpath',function(pathFile){
-
-    var room = pathFile;
-    var datafile = fs.readFileSync(pathFile,'binary');
-   // io.emit('readfile',datafile)
-    console.log('file content: ', datafile)
-    
-    socket.join(room);
-    io.sockets.in(room).emit('readfile', datafile);
-
-    var watcher = chokidar.watch(pathFile, {
-      ignored: /node_modules/,
-      persistent: true
-    });
-
-    watcher.on('change', path => {
-      var datafile = fs.readFileSync(pathFile,'binary');
-      console.log('file changed: ', path)
-<<<<<<< HEAD
-      io.sockets.in(room).emit('readfile', datafile);
-     // io.emit('readfile',datafile)
-    });
-
-=======
-      io.emit('readfile',datafile)
-    });
-    socket.on('disconnect', function(){
-    watcher.close();
+  socket.on('disconnect', function(){
     console.log('user disconnected');
   });
->>>>>>> 9616af093262d8a5c452a91adaa38118ed8055de
 
+  socket.on('Callpath',function(pathFile){
+    console.log(pathFile);
+     var datafile = fs.readFileSync(pathFile,'binary');
+    //join in to room path name
+    socket.join(pathFile);
+    //sent data file to room path
+    io.sockets.in(pathFile).emit('readfile', datafile);
+    //io.emit('readfile',datafile);
+    
+    var watcher = chokidar.watch(pathFile, {
+        ignored: /node_modules/,
+        persistent: true
+   });
+  
+    watcher.on('change', path => {
+      var datafile = fs.readFileSync(pathFile,'binary');
+      //sent data file to room path
+      io.sockets.in(pathFile).emit('readfile', datafile);
+      //io.emit('readfile',datafile)
+      console.log(path)
+    });
 
   })
 });
