@@ -27,15 +27,22 @@ io.on('connection', function(socket){
     })
 
   socket.on('Callpath',function(pathFile){
-    socket.join(pathFile);
 
-    fs.readFile(pathFile, "utf8", function(err, data) {
-       io.sockets.in(pathFile).emit('readfile', data);
-    });
-    //var datafile = fs.readFileSync(pathFile,'binary');
-    //sent data file to room path
+    console.log('join path file: '+ pathFile);
+    var datafile = fs.readFileSync(pathFile,'binary');
+    socket.join(pathFile);
+    io.sockets.in(pathFile).emit('readfile', datafile);
+ 
+    // socket.join(pathFile);
+
+    // fs.readFile(pathFile, "utf8", function(err, data) {
+    //    io.sockets.in(pathFile).emit('readfile', data);
+    // });
+    // var datafile = fs.readFileSync(pathFile,'binary');
+    // sent data file to room path
     // io.emit('readfile',datafile);
     
+
     var watcher = chokidar.watch(pathFile, {
         ignored: /node_modules/,
         persistent: true
@@ -49,9 +56,9 @@ io.on('connection', function(socket){
       console.log('change path : '+path)
     });
 
-    socket.on('Unsubscribe',function(data){
-      socket.leave(pathFile);
-    })
+    // socket.on('Unsubscribe',function(data){
+    //   socket.leave(pathFile);
+    // })
 
   })
 
