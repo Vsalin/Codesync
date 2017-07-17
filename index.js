@@ -31,13 +31,10 @@ io.on('connection', function(socket){
 
   socket.on('Callpath',function(pathFile){
     console.log('join path file: '+ pathFile);
-     var datafile = fs.readFileSync(pathFile,'binary');
-    //join in to room path name
+    var datafile = fs.readFileSync(pathFile,'binary');
     socket.join(pathFile);
-    //sent data file to room path
     io.sockets.in(pathFile).emit('readfile', datafile);
-    //io.emit('readfile',datafile);
-    
+
     var watcher = chokidar.watch(pathFile, {
         ignored: /node_modules/,
         persistent: true
