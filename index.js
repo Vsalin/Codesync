@@ -24,14 +24,13 @@ io.on('connection', function(socket){
   console.log('a user connected');
     var  myfile =  fs.readdirSync(testFolder)
     socket.emit('listdir',myfile)
-  
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 
   socket.on('Callpath',function(pathFile){
-    console.log(pathFile);
+    console.log('join path file: '+ pathFile);
      var datafile = fs.readFileSync(pathFile,'binary');
     //join in to room path name
     socket.join(pathFile);
@@ -49,7 +48,7 @@ io.on('connection', function(socket){
       //sent data file to room path
       io.sockets.in(pathFile).emit('readfile', datafile);
       //io.emit('readfile',datafile)
-      console.log(path)
+      console.log('change path : '+path)
     });
 
   })
