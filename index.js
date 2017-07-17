@@ -26,48 +26,41 @@ io.on('connection', function(socket){
           socket.emit('listdir',files)
     })
 
-  socket.on('Callpath',function(pathFile){
-
-    console.log('join path file: '+ pathFile);
-    var datafile = fs.readFileSync(pathFile,'binary');
+  socket.on('Callpath',(pathFile)=>{
     socket.join(pathFile);
-    io.sockets.in(pathFile).emit('readfile', datafile);
- 
-    // socket.join(pathFile);
+    console.log('User subscribe: '+ pathFile)
 
-    // fs.readFile(pathFile, "utf8", function(err, data) {
-    //    io.sockets.in(pathFile).emit('readfile', data);
-    // });
-    // var datafile = fs.readFileSync(pathFile,'binary');
-    // sent data file to room path
-    // io.emit('readfile',datafile);
+    fs.readFile(pathFile, "utf8", (err, data)=> {
+       io.sockets.in(pathFile).emit('readfile', data);
+    });
+
     
-
     var watcher = chokidar.watch(pathFile, {
         ignored: /node_modules/,
         persistent: true
    });
-  
-    watcher.on('change', path => {
-      var datafile = fs.readFileSync(pathFile,'binary');
-      //sent data file to room path
-      io.sockets.in(pathFile).emit('readfile', datafile);
-      //io.emit('readfile',datafile)
-      console.log('change path : '+path)
-    });
 
-    // socket.on('Unsubscribe',function(data){
-    //   socket.leave(pathFile);
-    // })
+    watcher.on('change', path => {
+      console.log('change path : '+ path)
+      fs.readFile(path, "utf8", (err, data)=>{
+       io.sockets.in(path).emit('readfile', data);
+          console.log('emit to readfile')
+      });
+    });
 
   })
 
-  socket.on('disconnect', function(){
+   socket.on('Unsubscribe',(data)=>{
+      socket.leave(data);
+      console.log('Leave from :'+ data);
+    })
+
+  socket.on('disconnect', ()=>{
     console.log('user disconnected');
   });
 
 });
-
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+

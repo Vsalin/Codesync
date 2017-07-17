@@ -48,30 +48,33 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io();
+    var old= [1];
       
     socket.on('listdir', function (data) {
         data.forEach((file) => {
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
             })
-       // console.log(data);
     });
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
         console.log(pathFile);
-        socket.emit('Callpath',pathFile);
-        
-        
+        old.push(pathFile)
+        console.log('old is :' + old+'old[0] is' + old[0])
+        let n = old.length 
+        console.log('old: ' + old[n-2] +'and new:'+ old[n-1])
+        if(old[n-2] != 1){
+          if(old[n-2] != old[n-1]){
+            socket.emit('Unsubscribe',old[n-2]);
+          }
+        }
+         socket.emit('Callpath',pathFile);
     })
     socket.on('readfile', function (datafile) {
         editor.setValue(datafile,-1); 
-            // socket.emit('Unsubscribe',"")
+       // socket.emit('Unsubscribe',"");
     });
-    
-    
-    
 </script>
 
 
 </body>
-
 </html>
