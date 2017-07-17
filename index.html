@@ -47,8 +47,9 @@
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
     var socket = io('http://10.20.30.2:3000');
-      
+ 
     socket.on('listdir', function (data) {
         data.forEach((file) => {
               $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
