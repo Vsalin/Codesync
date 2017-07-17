@@ -86,6 +86,7 @@ function autoImplementedMode(filename){
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
+
         var mode = autoImplementedMode(pathFile);
         editor.getSession().setMode(mode);
          socket.emit('Callpath',pathFile);
