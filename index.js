@@ -22,19 +22,20 @@ const fs = require('fs');
 
 io.on('connection', function(socket){
   console.log('a user connected');
-    var  myfile =  fs.readdirSync(testFolder)
-    socket.emit('listdir',myfile)
-
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
+    fs.readdir(testFolder, (err, files) => {
+          socket.emit('listdir',files)
+    })
 
   socket.on('Callpath',function(pathFile){
-    console.log('join path file: '+ pathFile);
-    var datafile = fs.readFileSync(pathFile,'binary');
     socket.join(pathFile);
-    io.sockets.in(pathFile).emit('readfile', datafile);
 
+    fs.readFile(pathFile, "utf8", function(err, data) {
+       io.sockets.in(pathFile).emit('readfile', data);
+    });
+    //var datafile = fs.readFileSync(pathFile,'binary');
+    //sent data file to room path
+    // io.emit('readfile',datafile);
+    
     var watcher = chokidar.watch(pathFile, {
         ignored: /node_modules/,
         persistent: true
@@ -48,8 +49,18 @@ io.on('connection', function(socket){
       console.log('change path : '+path)
     });
 
+    socket.on('Unsubscribe',function(data){
+      socket.leave(pathFile);
+    })
+
   })
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
 });
+
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
