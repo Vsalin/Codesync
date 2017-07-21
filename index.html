@@ -24,6 +24,9 @@
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
+      .folder > ul {
+      display: none;
+      }
 </style>
 </head>
 <body>
@@ -32,7 +35,9 @@
   <ul class="nav navbar-nav">
    <li id ="directory">Directory file</li>
   </ul>
+
 </div>
+
 <div class="container">
   <div id="editor">
   </div>
@@ -43,8 +48,24 @@
 <script>
      var editor = ace.edit("editor");
      editor.setTheme("ace/theme/twilight");
-     editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
+
+     function autoImplementedMode(filename){
+    var ext = filename.split('.').pop();
+    var prefix = "ace/mode/";
+
+    if(!ext){
+        return prefix + "text";
+    }
+    switch (ext) {
+        case "js":
+        return prefix + "javascript";
+        case "html":
+        return prefix + "html";
+        case "json":
+        return prefix + "json";
+    }
+}
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -55,22 +76,10 @@
       //console.log('listdir');
       console.log(JSON.stringify(data));
         data.forEach((file) => {
-              $('#directory').append('<li><a><a href="#" data-path="' + file.path + '">' + file.name + '</a></li>')
-             console.log(file);
-           })
-    });
-
-     socket.on('listdirinfolder', function (data) {
-     // console.log('listdirinfolder : ',data);
-      //$('#directory').remove();
+          $('#directory').append('<li><a><a href="#" data-path="' + file.path + '">' + file.name + '</a></li>')
+            console.log(file);
       
-        var list = ''
-        data.forEach((file) => {
-          list += '<li><a><a href="#" data-path="' + file.path + '">' + file + '</a></li>'
-              // $('#directory').replaceWith('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
-              //  console.log('listdirinfolder123 : ',data);
-            })
-        $('#directory').html(list)
+          })
     });
 
     $('#directory').on('click', 'li > a', function(event) {
@@ -85,6 +94,8 @@
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
+        var mode = autoImplementedMode(pathFile);
+        editor.getSession().setMode(mode);
          socket.emit('Callpath',pathFile);
     })
     socket.on('readfile', function (datafile) {

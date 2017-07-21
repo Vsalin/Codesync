@@ -79,6 +79,11 @@ const walkSync = (dir, filelist = []) => {
           name: file,
           path: path.join(dir, file),
           directory: true,
+            children:[
+              {
+                name:'ee.js'
+              }
+            ]
       })
             
     }else{
