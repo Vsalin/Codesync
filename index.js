@@ -4,6 +4,7 @@ var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var io = require('socket.io')(http);
 var chokidar = require('chokidar');
+var mime = require('mime');
 
 const testFolder = './';
 const fs = require('fs');
@@ -22,19 +23,24 @@ const fs = require('fs');
 
 io.on('connection', function(socket){
   console.log('a user connected');
-    fs.readdir(testFolder, (err, files) => {
-          socket.emit('listdir',files)
-    })
+      fs.readdir(testFolder, (err, files) => {
+          files.push("..",".")
+          var file = [];
+       
+       wonderfile = walkSync(__dirname,file);
+      // console.log(wonderfile)
+       socket.emit('listdir',wonderfile)
+       
+      })
 
   socket.on('Callpath',(pathFile)=>{
     socket.join(pathFile);
     console.log('User subscribe: '+ pathFile)
-
-    fs.readFile(pathFile, "utf8", (err, data)=> {
-       io.sockets.in(pathFile).emit('readfile', data);
+      
+      fs.readFile(pathFile, "utf8", (err, data)=> {
+      io.sockets.in(pathFile).emit('readfile', data);
     });
-
-    
+  
     var watcher = chokidar.watch(pathFile, {
         ignored: /node_modules/,
         persistent: true
@@ -54,13 +60,48 @@ io.on('connection', function(socket){
       socket.leave(data);
       console.log('Leave from :'+ data);
     })
-
   socket.on('disconnect', ()=>{
     console.log('user disconnected');
   });
 
 });
+
+const walkSync = (dir, filelist = []) => {
+  
+  fs.readdirSync(dir).forEach(file => {
+    if(file!='node_modules' && file !='.git' && file !='lib'){
+    if(fs.statSync(path.join(dir, file)).isDirectory()){
+      
+      walkSync(path.join(dir, file), filelist)
+      filelist.push(
+      filelist[file]=
+      {
+          name: file,
+          path: path.join(dir, file),
+          directory: true,
+      })
+            
+    }else{
+      filelist.push(
+       filelist[file]=
+      {
+          name: file,
+          path: path.join(dir, file),
+          size: fs.statSync(path.join(dir, file)).size,
+          type: mime.lookup(file),
+          directory: false,
+      });
+    }  
+    }
+  })
+
+  return filelist;
+  }
+
+
+// node_modules
+// .git
+
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-

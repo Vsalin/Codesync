@@ -8,10 +8,10 @@
         top: 0;
         right: 0;
         bottom: 0;
-        left: 160px; 
+        left: 200px; 
     }
       .navbar-fixed-left {
-        width: 160px;
+        width: 200px;
         position: fixed;
         border-radius: 0;
         height: 100%;
@@ -19,6 +19,7 @@
         top:0;
         left: 0;
         color: white;
+        overflow: scroll;
       }
       .navbar-fixed-left + .container {
         padding-left: 170px;
@@ -39,30 +40,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script src="./ace/src/ext-modelist.js"></script>
 <script>
      var editor = ace.edit("editor");
      editor.setTheme("ace/theme/twilight");
-    //  editor.getSession().setMode("ace/mode/javascript");
+     editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
-
-function autoImplementedMode(filename){
-    var ext = filename.split('.').pop();
-    var prefix = "ace/mode/";
-
-    if(!ext){
-        return prefix + "text";
-    }
-    switch (ext) {
-        case "js":
-        return prefix + "javascript";
-        case "html":
-        return prefix + "html";
-        case "json":
-        return prefix + "json";
-    }
-}
-
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -70,10 +52,27 @@ function autoImplementedMode(filename){
     var old= [1];
       
     socket.on('listdir', function (data) {
+      //console.log('listdir');
+      console.log(JSON.stringify(data));
         data.forEach((file) => {
-              $('#directory').append('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
-            })
+              $('#directory').append('<li><a><a href="#" data-path="' + file.path + '">' + file.name + '</a></li>')
+             console.log(file);
+           })
     });
+
+     socket.on('listdirinfolder', function (data) {
+     // console.log('listdirinfolder : ',data);
+      //$('#directory').remove();
+      
+        var list = ''
+        data.forEach((file) => {
+          list += '<li><a><a href="#" data-path="' + file.path + '">' + file + '</a></li>'
+              // $('#directory').replaceWith('<li><a><a href="#" data-path="' + file + '">' + file + '</a></li>')
+              //  console.log('listdirinfolder123 : ',data);
+            })
+        $('#directory').html(list)
+    });
+
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
         console.log(pathFile);
@@ -86,14 +85,10 @@ function autoImplementedMode(filename){
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
-
-        var mode = autoImplementedMode(pathFile);
-        editor.getSession().setMode(mode);
          socket.emit('Callpath',pathFile);
     })
     socket.on('readfile', function (datafile) {
         editor.setValue(datafile,-1); 
-       // socket.emit('Unsubscribe',"");
     });
 </script>
 
