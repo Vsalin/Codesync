@@ -26,22 +26,38 @@ io.on('connection', function(socket){
       fs.readdir(testFolder, (err, files) => {
           files.push("..",".")
           var file = [];
+<<<<<<< HEAD
        //  console.log(loopfile)
        wonderfile = readDirRecursive(__dirname);
        console.log(wonderfile)
        socket.emit('listdir',wonderfile)
 
+=======
+       
+       wonderfile = walkSync(__dirname,file);
+      // console.log(wonderfile)
+       socket.emit('listdir',wonderfile)
+       
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3
       })
 
   socket.on('Callpath',(pathFile)=>{
     socket.join(pathFile);
     console.log('User subscribe: '+ pathFile)
+<<<<<<< HEAD
   
     fs.readFile(pathFile, "utf8", (err, data)=> {
     io.sockets.in(pathFile).emit('readfile', data);
     });
     
 
+=======
+      
+      fs.readFile(pathFile, "utf8", (err, data)=> {
+      io.sockets.in(pathFile).emit('readfile', data);
+    });
+  
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3
     var watcher = chokidar.watch(pathFile, {
         ignored: /node_modules/,
         persistent: true
@@ -67,6 +83,7 @@ io.on('connection', function(socket){
 
 });
 
+<<<<<<< HEAD
 
 // const walkSync = (dir, filelist = []) => {
 //   fs.readdirSync(dir).forEach(file => {
@@ -128,3 +145,49 @@ if(file !='node_modules' && file!='.git'){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+=======
+const walkSync = (dir, filelist = []) => {
+  
+  fs.readdirSync(dir).forEach(file => {
+    if(file!='node_modules' && file !='.git' && file !='lib'){
+    if(fs.statSync(path.join(dir, file)).isDirectory()){
+      
+      walkSync(path.join(dir, file), filelist)
+      filelist.push(
+      filelist[file]=
+      {
+          name: file,
+          path: path.join(dir, file),
+          directory: true,
+            children:[
+              {
+                name:'ee.js'
+              }
+            ]
+      })
+            
+    }else{
+      filelist.push(
+       filelist[file]=
+      {
+          name: file,
+          path: path.join(dir, file),
+          size: fs.statSync(path.join(dir, file)).size,
+          type: mime.lookup(file),
+          directory: false,
+      });
+    }  
+    }
+  })
+
+  return filelist;
+  }
+
+
+// node_modules
+// .git
+
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3

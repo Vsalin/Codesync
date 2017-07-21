@@ -24,6 +24,7 @@
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
+<<<<<<< HEAD
 
     #style-1::-webkit-scrollbar-track
     {
@@ -44,6 +45,11 @@
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
       background-color: #2b2626;
     }
+=======
+      .folder > ul {
+      display: none;
+      }
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3
 </style>
 </head>
 <body>
@@ -54,6 +60,7 @@
   </ul>
 
 </div>
+
 <div class="container">
   <div id="editor">
   </div>
@@ -64,7 +71,10 @@
 <script>
      var editor = ace.edit("editor");
      editor.setTheme("ace/theme/twilight");
+<<<<<<< HEAD
      editor.getSession().setMode("ace/mode/javascript");
+=======
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3
      editor.$blockScrolling = Infinity;
 
      function autoImplementedMode(filename){
@@ -83,7 +93,6 @@
         return prefix + "json";
     }
 }
-
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -91,7 +100,10 @@
     var old= [1];
       
     socket.on('listdir', function (data) {
+      //console.log('listdir');
+      console.log(JSON.stringify(data));
         data.forEach((file) => {
+<<<<<<< HEAD
         console.log(file);
         if(file.isDirectory === true ){
           $('#directory').append('<li class="folder"><span>' + file.name + '</span><ul><li>ja</li></ul></li>');
@@ -100,6 +112,12 @@
           $('#directory').append('<li><a><a href="#" data-path="' + file.path + '">' + file.name + '</a></li>')
 
            })
+=======
+          $('#directory').append('<li><a><a href="#" data-path="' + file.path + '">' + file.name + '</a></li>')
+            console.log(file);
+      
+          })
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3
     });
 
     $('#directory').on('click', 'li > a', function(event) {
@@ -114,7 +132,11 @@
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
+<<<<<<< HEAD
          var mode = autoImplementedMode(pathFile);
+=======
+        var mode = autoImplementedMode(pathFile);
+>>>>>>> 8e1ab96cd6dd6e2f42e547d002295595321e2dc3
         editor.getSession().setMode(mode);
         socket.emit('Callpath',pathFile);
     })
