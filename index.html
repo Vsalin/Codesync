@@ -71,7 +71,7 @@
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
 
-     function autoImplementedMode(filename){
+  function autoImplementedMode(filename){
     var ext = filename.split('.').pop();
     var prefix = "ace/mode/";
 
@@ -100,6 +100,7 @@
 
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
+        var isDirec = $(this).data('directory');
         console.log(pathFile);
         old.push(pathFile)
         console.log('old is :' + old+'old[0] is' + old[0])
@@ -110,32 +111,37 @@
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
-         var mode = autoImplementedMode(pathFile);
+
+        if(isDirec !== true){
+          var mode = autoImplementedMode(pathFile);
         editor.getSession().setMode(mode);
         socket.emit('Callpath',pathFile);
+        }
+
     })
     socket.on('readfile', function (datafile) {
         editor.setValue(datafile,-1); 
     });
 
   $('.folder').click(function () {
-	  const ul = $(this).find('ul')
-     const display = ul.css('display')
-    ul.css('display', display === 'none' ? 'block' : 'none') 
+    console.log('click folder')
+	  const li = $(this).find('li')
+     const display = li.css('display')
+    li.css('display', display === 'none' ? 'block' : 'none') 
 })
 
 
 function printFileMetaRecursive (list, space = 0) {
   let whitespace = ''  
   for (i = 0; i < space; ++i) {
-    whitespace += '&nbsp'
+    whitespace += '&nbsp&nbsp'
   }
 
   // gap ->  &nbsp
   list.forEach((file) => {
     if(file.name !=='node_modules'){
     if (file.isDirectory === true) {
-       $('#directory').append('<li class="folder"><a>'+ whitespace +file.name+'</a></li>')
+       $('#directory').append('<li class="folder"><a data-directory="' + file.isDirectory + '">'+ whitespace +file.name+'</a></li>')
       printFileMetaRecursive(file.children, space + 2)
     } else {
       $('#directory').append('<li><a href="#" data-path="' + file.filePath + '">'+ whitespace +file.name+'</li>')
