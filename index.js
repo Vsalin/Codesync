@@ -67,41 +67,6 @@ io.on('connection', function(socket){
 
 });
 
-
-// const walkSync = (dir, filelist = []) => {
-//   fs.readdirSync(dir).forEach(file => {
-//     // const fileMeta = fs.statSync(path.join(dir, file))
-//     // console.log(fileMeta)
-//     // filelist.push(file)
-//     if(file !='node_modules' && file!='.git'){
-//       if(fs.statSync(path.join(dir, file)).isDirectory()){ // ./ja
-//         filelist.push()
-
-//         filelist.push(
-//         filelist[file]=
-//         {
-//             name: file,
-//             path: path.join(dir, file),
-//             isdirectory: true
-//            // children: walkSync(path.join(dir, file), filelist)   // ./ja/ja3,file
-//         })
-//         walkSync(path.join(dir, file), filelist);
-//       }else{
-//         filelist.push(
-//         filelist[file]=
-//         {
-//             name: file,
-//             path: path.join(dir, file),
-//             size: fs.statSync(path.join(dir, file)).size,
-//             type: mime.lookup(file),
-//             isdirectory: false
-//         });
-//       }
-//     }
-//   });
-//   return filelist;
-// }
-
 function readDirRecursive (dir) {
   files = fs.readdirSync(dir)
   
@@ -112,19 +77,24 @@ function readDirRecursive (dir) {
       name: file,
       filePath,
       isDirectory: false,
-      children: []
+      children: [],
+      ignored:[
+        '/node_module'
+      ]
     }
-if(file !='node_modules' && file!='.git'){
+//if(file !='node_modules' && file!='.git'){
     if (fs.statSync(filePath).isDirectory()) {
       result.isDirectory = true
       result.children = readDirRecursive(filePath)
     }
     return result
-    }else{ 
-  }
+
   })
 }
-
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+
+function test() {
+  alert("teest")
+}
