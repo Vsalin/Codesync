@@ -77,10 +77,7 @@ function readDirRecursive (dir) {
       name: file,
       filePath,
       isDirectory: false,
-      children: [],
-      ignored:[
-        '/node_module'
-      ]
+      children: []
     }
 //if(file !='node_modules' && file!='.git'){
     if (fs.statSync(filePath).isDirectory()) {
@@ -88,13 +85,10 @@ function readDirRecursive (dir) {
       result.children = readDirRecursive(filePath)
     }
     return result
-
+//  }
   })
 }
+
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-
-function test() {
-  alert("teest")
-}
