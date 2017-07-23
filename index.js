@@ -23,15 +23,9 @@ const fs = require('fs');
 
 io.on('connection', function(socket){
   console.log('a user connected');
-      fs.readdir(testFolder, (err, files) => {
-          files.push("..",".")
-          var file = [];
-       //  console.log(loopfile)
-       wonderfile = readDirRecursive(__dirname);
-       console.log(wonderfile)
-       socket.emit('listdir',wonderfile)
+  listfile = readDirRecursive(__dirname);
+  socket.emit('listdir',listfile)
 
-      })
 
   socket.on('Callpath',(pathFile)=>{
     socket.join(pathFile);

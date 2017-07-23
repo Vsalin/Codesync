@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <title>CodeSync</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style type="text/css" media="screen">
     #editor { 
         position: fixed; 
@@ -15,7 +17,7 @@
         position: fixed;
         border-radius: 0;
         height: 100%;
-        background: black;
+        background:#242a31;
         top:0;
         left: 0;
         color: white;
@@ -45,16 +47,52 @@
       background-color: #2b2626;
     }
 
-    #directory a{
-      text-decoration: none
+    * {
+    list-style: none;
+    font-family: 'Roboto', sans-serif;
+  
     }
+
+    #directory a{
+      text-decoration: none;
+  
+    }
+
+    .folder > li {
+     display: none;
+     list-style: none;
+
+    }
+    ul > :first-child {
+    font-size: 18px;
+    margin-bottom: 13px;
+    color: 	#bcd2d0;
+    } 
+
+/* unvisited link */
+a:link {
+    color: wheat;
+}
+
+/* visited link */
+a:visited {
+    color: wheat;
+}
+
+/* mouse over link */
+li > a:hover {
+    color: #f96161;
+}
+
+
 </style>
 </head>
 <body>
 
 <div class="navbar-fixed-left" id="style-1">
   <ul class="nav navbar-nav">
-   <li id ="directory">Directory file</li>
+  <li>"Directory file"</li>
+  <li id ="directory"></li>
   </ul>
 
 </div>
@@ -70,6 +108,7 @@
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
+     document.getElementById('editor').style.fontSize='13px';
 
   function autoImplementedMode(filename){
     var ext = filename.split('.').pop();
@@ -101,11 +140,12 @@
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
         var isDirec = $(this).data('directory');
+        $
         console.log(pathFile);
         old.push(pathFile)
-        console.log('old is :' + old+'old[0] is' + old[0])
+        //console.log('old is :' + old+'old[0] is' + old[0])
         let n = old.length 
-        console.log('old: ' + old[n-2] +'and new:'+ old[n-1])
+        //console.log('old: ' + old[n-2] +'and new:'+ old[n-1])
         if(old[n-2] != 1){
           if(old[n-2] != old[n-1]){
             socket.emit('Unsubscribe',old[n-2]);
@@ -123,13 +163,6 @@
         editor.setValue(datafile,-1); 
     });
 
-  $('.folder').click(function () {
-    console.log('click folder')
-	  const li = $(this).find('li')
-     const display = li.css('display')
-    li.css('display', display === 'none' ? 'block' : 'none') 
-})
-
 
 function printFileMetaRecursive (list, space = 0) {
   let whitespace = ''  
@@ -139,15 +172,22 @@ function printFileMetaRecursive (list, space = 0) {
 
   // gap ->  &nbsp
   list.forEach((file) => {
-    if(file.name !=='node_modules'){
+    if(file.name !=='node_modules'&& file.name !=='.gitignore' && file.name !=='lib'){
     if (file.isDirectory === true) {
-       $('#directory').append('<li class="folder"><a data-directory="' + file.isDirectory + '">'+ whitespace +file.name+'</a></li>')
+       $('#directory').append('<li class="folder" ><a data-directory="' + file.isDirectory + '">'+ whitespace +'<i class="fa fa-angle-double-right"></i>&nbsp'+file.name+'</a></li>')
       printFileMetaRecursive(file.children, space + 2)
     } else {
       $('#directory').append('<li><a href="#" data-path="' + file.filePath + '">'+ whitespace +file.name+'</li>')
     }
     }
   })
+
+  $('.folder').on('click', function(event) {
+    console.log('click folder')
+	  const li = $(this).find('li')
+     const display = li.css('display')
+    li.css('display', display === 'none' ? 'block' : 'none') 
+})
   
 }
 
