@@ -23,15 +23,9 @@ const fs = require('fs');
 
 io.on('connection', function(socket){
   console.log('a user connected');
-      fs.readdir(testFolder, (err, files) => {
-          files.push("..",".")
-          var file = [];
-       //  console.log(loopfile)
-       wonderfile = readDirRecursive(__dirname);
-       console.log(wonderfile)
-       socket.emit('listdir',wonderfile)
+  listfile = readDirRecursive(__dirname);
+  socket.emit('listdir',listfile)
 
-      })
 
   socket.on('Callpath',(pathFile)=>{
     socket.join(pathFile);
@@ -77,10 +71,7 @@ function readDirRecursive (dir) {
       name: file,
       filePath,
       isDirectory: false,
-      children: [],
-      ignored:[
-        '/node_module'
-      ]
+      children: []
     }
 //if(file !='node_modules' && file!='.git'){
     if (fs.statSync(filePath).isDirectory()) {
@@ -88,13 +79,10 @@ function readDirRecursive (dir) {
       result.children = readDirRecursive(filePath)
     }
     return result
-
+//  }
   })
 }
+
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-
-function test() {
-  alert("teest")
-}

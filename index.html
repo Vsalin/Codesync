@@ -3,6 +3,8 @@
 <html lang="en">
 <head>
 <title>CodeSync</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style type="text/css" media="screen">
     #editor { 
         position: fixed; 
@@ -16,7 +18,7 @@
         position: fixed;
         border-radius: 0;
         height: 100%;
-        background: black;
+        background:#242a31;
         top:0;
         left: 0;
         color: white;
@@ -25,23 +27,33 @@
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
     #style-1::-webkit-scrollbar-track
     {
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
       border-radius: 10px;
       background-color: #d0caca;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
     #style-1::-webkit-scrollbar
     {
       width: 12px;
       background-color: #d0caca;
     }
+
     #style-1::-webkit-scrollbar-thumb
     {
       border-radius: 10px;
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
       background-color: #2b2626;
     }
+<<<<<<< HEAD
     #directory a{
       text-decoration: none
     }
@@ -51,13 +63,55 @@
     ul li {
   list-style: none;
 }
+=======
+
+    * {
+    list-style: none;
+    font-family: 'Roboto', sans-serif;
+  
+    }
+
+    #directory a{
+      text-decoration: none;
+  
+    }
+
+    .folder > li {
+     display: none;
+     list-style: none;
+
+    }
+    ul > :first-child {
+    font-size: 18px;
+    margin-bottom: 13px;
+    color: 	#bcd2d0;
+    } 
+
+/* unvisited link */
+a:link {
+    color: wheat;
+}
+
+/* visited link */
+a:visited {
+    color: wheat;
+}
+
+/* mouse over link */
+li > a:hover {
+    color: #f96161;
+}
+
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
 </style>
 </head>
 <body>
 
 <div class="navbar-fixed-left" id="style-1">
   <ul class="nav navbar-nav">
-   <li id ="directory">Directory file</li>
+  <li>"Directory file"</li>
+  <li id ="directory"></li>
   </ul>
 
 </div>
@@ -73,9 +127,15 @@
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
+<<<<<<< HEAD
+=======
+     document.getElementById('editor').style.fontSize='13px';
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
   function autoImplementedMode(filename){
     var ext = filename.split('.').pop();
     var prefix = "ace/mode/";
+
     if(!ext){
         return prefix + "text";
     }
@@ -97,28 +157,45 @@
     socket.on('listdir', function (data) {
           printFileMetaRecursive(data)
     });
+<<<<<<< HEAD
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
         var isDirec = $(this).data('directory');
+=======
+
+    $('#directory').on('click', 'li > a', function(event) {
+        var pathFile = $(this).data('path');  //path
+        var isDirec = $(this).data('directory');
+        $
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
         console.log(pathFile);
         old.push(pathFile)
-        console.log('old is :' + old+'old[0] is' + old[0])
+        //console.log('old is :' + old+'old[0] is' + old[0])
         let n = old.length 
-        console.log('old: ' + old[n-2] +'and new:'+ old[n-1])
+        //console.log('old: ' + old[n-2] +'and new:'+ old[n-1])
         if(old[n-2] != 1){
           if(old[n-2] != old[n-1]){
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
         if(isDirec !== true){
           var mode = autoImplementedMode(pathFile);
         editor.getSession().setMode(mode);
         socket.emit('Callpath',pathFile);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
     })
     socket.on('readfile', function (datafile) {
         editor.setValue(datafile,-1); 
     });
+<<<<<<< HEAD
   $('.folder').click(function () {
     console.log('click folder')
 	  const ul = $(this).find('ul')
@@ -143,6 +220,37 @@ function printFileMetaRecursive (list, space = 0) {
   })
   
 }
+=======
+
+
+function printFileMetaRecursive (list, space = 0) {
+  let whitespace = ''  
+  for (i = 0; i < space; ++i) {
+    whitespace += '&nbsp&nbsp'
+  }
+
+  // gap ->  &nbsp
+  list.forEach((file) => {
+    if(file.name !=='node_modules'&& file.name !=='.gitignore' && file.name !=='lib'){
+    if (file.isDirectory === true) {
+       $('#directory').append('<li class="folder" ><a data-directory="' + file.isDirectory + '">'+ whitespace +'<i class="fa fa-angle-double-right"></i>&nbsp'+file.name+'</a></li>')
+      printFileMetaRecursive(file.children, space + 2)
+    } else {
+      $('#directory').append('<li><a href="#" data-path="' + file.filePath + '">'+ whitespace +file.name+'</li>')
+    }
+    }
+  })
+
+  $('.folder').on('click', function(event) {
+    console.log('click folder')
+	  const li = $(this).find('li')
+     const display = li.css('display')
+    li.css('display', display === 'none' ? 'block' : 'none') 
+})
+  
+}
+
+>>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
 </script>
 
 
