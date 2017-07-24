@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,83 +26,53 @@
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
-<<<<<<< HEAD
-=======
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
     #style-1::-webkit-scrollbar-track
     {
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
       border-radius: 10px;
       background-color: #d0caca;
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
     #style-1::-webkit-scrollbar
     {
       width: 12px;
       background-color: #d0caca;
     }
-
     #style-1::-webkit-scrollbar-thumb
     {
       border-radius: 10px;
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
       background-color: #2b2626;
     }
-<<<<<<< HEAD
-    #directory a{
-      text-decoration: none
-    }
-    .folder > ul {
-        display: none;
-    }
-    ul li {
-  list-style: none;
-}
-=======
-
     * {
     list-style: none;
     font-family: 'Roboto', sans-serif;
   
     }
-
     #directory a{
       text-decoration: none;
   
     }
-
     .folder > li {
      display: none;
      list-style: none;
-
     }
     ul > :first-child {
     font-size: 18px;
     margin-bottom: 13px;
     color: 	#bcd2d0;
     } 
-
 /* unvisited link */
 a:link {
     color: wheat;
 }
-
 /* visited link */
 a:visited {
     color: wheat;
 }
-
 /* mouse over link */
 li > a:hover {
     color: #f96161;
 }
-
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
 </style>
 </head>
 <body>
@@ -127,15 +96,10 @@ li > a:hover {
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
-<<<<<<< HEAD
-=======
      document.getElementById('editor').style.fontSize='13px';
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
   function autoImplementedMode(filename){
     var ext = filename.split('.').pop();
     var prefix = "ace/mode/";
-
     if(!ext){
         return prefix + "text";
     }
@@ -157,17 +121,10 @@ li > a:hover {
     socket.on('listdir', function (data) {
           printFileMetaRecursive(data)
     });
-<<<<<<< HEAD
-    $('#directory').on('click', 'li > a', function(event) {
-        var pathFile = $(this).data('path');  //path
-        var isDirec = $(this).data('directory');
-=======
-
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
         var isDirec = $(this).data('directory');
         $
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
         console.log(pathFile);
         old.push(pathFile)
         //console.log('old is :' + old+'old[0] is' + old[0])
@@ -178,57 +135,20 @@ li > a:hover {
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
         if(isDirec !== true){
           var mode = autoImplementedMode(pathFile);
         editor.getSession().setMode(mode);
         socket.emit('Callpath',pathFile);
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
     })
     socket.on('readfile', function (datafile) {
         editor.setValue(datafile,-1); 
     });
-<<<<<<< HEAD
-  $('.folder').click(function () {
-    console.log('click folder')
-	  const ul = $(this).find('ul')
-     const display = ul.css('display')
-    ul.css('display', display === 'none' ? 'block' : 'none') 
-})
 function printFileMetaRecursive (list, space = 0) {
   let whitespace = ''  
   for (i = 0; i < space; ++i) {
     whitespace += '&nbsp&nbsp'
   }
-  // gap ->  &nbsp
-  list.forEach((file) => {
-    if(file.name !=='node_modules' && file.name !=='.git' && file.name !=='lib' ){
-    if (file.isDirectory === true) {
-       $('#directory').append('<li class="folder"><a data-directory="' + file.isDirectory + '">'+ whitespace +file.name+'</a></li>')
-      printFileMetaRecursive(file.children,space+2)
-    } else {
-      $('#directory').append('<li><a href="#" data-path="' + file.filePath + '">'+ whitespace +file.name+'</li>')
-    }
-    }
-  })
-  
-}
-=======
-
-
-function printFileMetaRecursive (list, space = 0) {
-  let whitespace = ''  
-  for (i = 0; i < space; ++i) {
-    whitespace += '&nbsp&nbsp'
-  }
-
   // gap ->  &nbsp
   list.forEach((file) => {
     if(file.name !=='node_modules'&& file.name !=='.gitignore' && file.name !=='lib'){
@@ -240,7 +160,6 @@ function printFileMetaRecursive (list, space = 0) {
     }
     }
   })
-
   $('.folder').on('click', function(event) {
     console.log('click folder')
 	  const li = $(this).find('li')
@@ -249,8 +168,6 @@ function printFileMetaRecursive (list, space = 0) {
 })
   
 }
-
->>>>>>> 8da68295f4f23f43717c1e955376e86b9ef57ca9
 </script>
 
 
