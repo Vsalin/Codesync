@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +25,12 @@
       .navbar-fixed-left + .container {
         padding-left: 170px;
       }
+    #style-1::-webkit-scrollbar-track
+    {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      background-color: #d0caca;
+    }
     #style-1::-webkit-scrollbar
     {
       width: 12px;
@@ -35,6 +42,15 @@
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
       background-color: #2b2626;
     }
+    #directory a{
+      text-decoration: none
+    }
+    .folder > ul {
+        display: none;
+    }
+    ul li {
+  list-style: none;
+}
 </style>
 </head>
 <body>
@@ -50,17 +66,14 @@
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.7/ace.js" type="text/javascript" charset="utf-8"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-
 <script>
      var editor = ace.edit("editor");
      editor.setTheme("ace/theme/twilight");
      editor.getSession().setMode("ace/mode/javascript");
      editor.$blockScrolling = Infinity;
-     function autoImplementedMode(filename){
+  function autoImplementedMode(filename){
     var ext = filename.split('.').pop();
     var prefix = "ace/mode/";
     if(!ext){
@@ -75,39 +88,18 @@
         return prefix + "json";
     }
 }
-
 </script>
 <script src="/socket.io/socket.io.js"></script>
-  <script>
-    
-      var socket = io();
-      var old= [1];
-
-      socket.on('listdir', function (data) {
-   
-        
-          data.forEach((file) => {
-            console.log(file)
-            // function  printFileMetaRecursive (data) {
-            if(file.isDirectory === true ){
-                $('#directory').append('<li class="folder"><span>' + file.name + '</span></li>');
-
-                //printFileMetaRecursive('<ul><li>' + file.children + '</li></ul>')
-                 //console.log(file.children)
-            }else{
-                $('#directory').append('<li><a><a href="#" data-path="' + file.filePath + '">' + file.name + '</a></li>')
-            }
-              // }       
-        })
-        
-
-// const allFilesAndDirectories = readDirRecursive(__dirname)
- // printFileMetaRecursive(allFilesAndDirectories)
-    })
-
-
+<script>
+    var socket = io();
+    var old= [1];
+      
+    socket.on('listdir', function (data) {
+          printFileMetaRecursive(data)
+    });
     $('#directory').on('click', 'li > a', function(event) {
         var pathFile = $(this).data('path');  //path
+        var isDirec = $(this).data('directory');
         console.log(pathFile);
         old.push(pathFile)
         console.log('old is :' + old+'old[0] is' + old[0])
@@ -118,18 +110,39 @@
             socket.emit('Unsubscribe',old[n-2]);
           }
         }
-         var mode = autoImplementedMode(pathFile);
+        if(isDirec !== true){
+          var mode = autoImplementedMode(pathFile);
         editor.getSession().setMode(mode);
         socket.emit('Callpath',pathFile);
+        }
     })
     socket.on('readfile', function (datafile) {
         editor.setValue(datafile,-1); 
     });
-  $('#directory').click(function () {
+  $('.folder').click(function () {
+    console.log('click folder')
 	  const ul = $(this).find('ul')
      const display = ul.css('display')
     ul.css('display', display === 'none' ? 'block' : 'none') 
 })
+function printFileMetaRecursive (list, space = 0) {
+  let whitespace = ''  
+  for (i = 0; i < space; ++i) {
+    whitespace += '&nbsp&nbsp'
+  }
+  // gap ->  &nbsp
+  list.forEach((file) => {
+    if(file.name !=='node_modules' && file.name !=='.git' && file.name !=='lib' ){
+    if (file.isDirectory === true) {
+       $('#directory').append('<li class="folder"><a data-directory="' + file.isDirectory + '">'+ whitespace +file.name+'</a></li>')
+      printFileMetaRecursive(file.children,space+2)
+    } else {
+      $('#directory').append('<li><a href="#" data-path="' + file.filePath + '">'+ whitespace +file.name+'</li>')
+    }
+    }
+  })
+  
+}
 </script>
 
 
