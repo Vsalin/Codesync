@@ -151,7 +151,7 @@ function printFileMetaRecursive (list, space = 0) {
   }
   // gap ->  &nbsp
   list.forEach((file) => {
-    if(file.name !=='node_modules'&& file.name !=='.gitignore' && file.name !=='lib'){
+    if(file.name !=='node_modules'&& file.name !=='.gitignore' && file.name !=='lib' && file.name !=='.git'){
     if (file.isDirectory === true) {
        $('#directory').append('<li class="folder" ><a data-directory="' + file.isDirectory + '">'+ whitespace +'<i class="fa fa-angle-double-right"></i>&nbsp'+file.name+'</a></li>')
       printFileMetaRecursive(file.children, space + 2)
